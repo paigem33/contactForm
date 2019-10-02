@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 
 import './App.css';
-import { TextField, Grid, Typography, withStyles, spacing } from '@material-ui/core';
+import { TextField, Grid, Typography } from '@material-ui/core';
 // import TextField from '@material-ui/core/TextField';
 import CardContent from '@material-ui/core/CardContent';
 import Card from '@material-ui/core/Card';
@@ -46,6 +46,37 @@ export default class ContactForm extends Component {
     }
     console.log(this.state)
   }
+
+  handleSubmit = () => {
+    const { email, name, message } = this.state;
+
+    fetch(
+      "https://ixy7yi2jm6.execute-api.us-east-1.amazonaws.com/Production",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          message: message
+        })
+      }
+    )
+      .then(res => res.json())
+      .then(json => {
+        console.log("Response: " + json);
+      })
+      .catch(err => {
+        console.log('***Error: ' + err);
+      });
+
+    // clear form
+    // document.getElementById("contact-form").reset();
+    // this.setState({ name: "", email: "", message: "" });
+    // event.preventDefault();
+  };
   
   render (){
     // const classes = useStyles();
@@ -112,6 +143,7 @@ export default class ContactForm extends Component {
                 <Button variant="contained" color="primary" 
                 // className={classes.button}
                 fullWidth
+                onClick={ () => this.handleSubmit()}
                 >
                   Submit
                 </Button>
