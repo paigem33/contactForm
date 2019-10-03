@@ -1,29 +1,9 @@
-
 import React, { Component } from 'react';
-
 import './App.css';
 import { TextField, Grid, Typography } from '@material-ui/core';
-// import TextField from '@material-ui/core/TextField';
 import CardContent from '@material-ui/core/CardContent';
 import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
-// import Typography from '@material-ui/core/Typography';
-// import Grid from '@material-ui/core/Grid';
-
-// const useStyles = makeStyles({
-//   textField: {
-//     width: '100%'
-//   },
-//   button: {
-//     width: '48%',
-//     marginTop: 16,
-//     '&:first-of-type': {
-//       marginRight: '4%'
-//     }
-//   }
-// });
-
-
 
 export default class ContactForm extends Component {
   constructor(){
@@ -51,11 +31,12 @@ export default class ContactForm extends Component {
     const { email, name, message } = this.state;
 
     fetch(
-      "https://ixy7yi2jm6.execute-api.us-east-1.amazonaws.com/Production",
+      "https://ixy7yi2jm6.execute-api.us-east-1.amazonaws.com/Production/contactForm-MK",
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          'Access-Control-Allow-Origin': 'http://contact-form.s3-website-us-west-2.amazonaws.com/'
         },
         body: JSON.stringify({
           name: name,
@@ -69,17 +50,13 @@ export default class ContactForm extends Component {
         console.log("Response: " + json);
       })
       .catch(err => {
-        console.log('***Error: ' + err);
+        console.log('Error: ' + err);
+        alert('Sorry, there was an error and your message was unable to send.')
       });
 
-    // clear form
-    // document.getElementById("contact-form").reset();
-    // this.setState({ name: "", email: "", message: "" });
-    // event.preventDefault();
   };
   
   render (){
-    // const classes = useStyles();
     const { name, email, message} = this.state
     return (
        <Grid
@@ -92,9 +69,7 @@ export default class ContactForm extends Component {
        >
       
         <Grid item xs={4}>
-            <Card 
-            // className={classes.card}
-            >
+            <Card>
               <CardContent>
               <Typography variant="h3" align="center" gutterBottom>
                 Send us a message!
@@ -104,7 +79,6 @@ export default class ContactForm extends Component {
                   id="outlined-name "
                   label="Name"
                   type="text"
-                  // className={classes.textField}
                   defaultValue={name}
                   name="name"
                   onChange={e => this.handleChange(e.target.value, e.target.name)}
@@ -120,7 +94,6 @@ export default class ContactForm extends Component {
                   defaultValue={email}
                   name="email"
                   onChange={e => this.handleChange(e.target.value, e.target.name)}
-                  // className={classes.textField}
                   margin="normal"
                   variant="outlined"
                   fullWidth
@@ -135,13 +108,11 @@ export default class ContactForm extends Component {
                   defaultValue={message}
                   name="message"
                   onChange={e => this.handleChange(e.target.value, e.target.name)}
-                  // className={classes.textField}
                   margin="normal"
                   variant="outlined"
                   fullWidth
                 />
                 <Button variant="contained" color="primary" 
-                // className={classes.button}
                 fullWidth
                 onClick={ () => this.handleSubmit()}
                 >
